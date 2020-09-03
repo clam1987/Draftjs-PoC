@@ -1,10 +1,6 @@
 const router = require("express").Router();
 const db = require("../model/");
 
-module.exports = function(app) {
-
-}
-
 router.get("/announcements", async (req,res) => {
     try {
         const response = await db.Announcements.findAll()
