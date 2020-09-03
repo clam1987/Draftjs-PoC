@@ -1,0 +1,8 @@
+.textfield {
+    border: 1px solid #000;
+    border-radius: 4px;
+    height: 221px;
+    width: 532px;
+    padding: 10px 10px 0px 10px;
+    overflow-y: auto;
+  }
