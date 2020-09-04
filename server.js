@@ -3,6 +3,7 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 const apiRoute = require("./routes/apiRoutes");
 const path = require("path");
+const db = require("./model");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -16,5 +17,8 @@ if (process.env.NODE_ENV === 'production') {
         res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
       });
 }
-
-app.listen(PORT, () => console.log(`My server is running on PORT: ${PORT}`));
+db.sequelize.sync({ force: true }).then(function() {
+    app.listen(PORT, function() {
+      console.log("App listening on PORT " + PORT);
+    });
+  });
