@@ -9,16 +9,25 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Toolbar from "@material-ui/core/Toolbar";
 import FormatBoldIcon from '@material-ui/icons/FormatBold';
 import FormatItalicIcon from '@material-ui/icons/FormatItalic';
+import GifIcon from '@material-ui/icons/Gif';
 import FormatUnderlinedIcon from '@material-ui/icons/FormatUnderlined';
 import StrikethroughSIcon from '@material-ui/icons/StrikethroughS';
 import ListIcon from '@material-ui/icons/List';
 import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
 import HighlightIcon from '@material-ui/icons/Highlight';
-import { Editor, EditorState, RichUtils, convertToRaw, ContentState } from "draft-js"
+import { EditorState, RichUtils, convertToRaw, ContentState } from "draft-js";
+import Editor from "draft-js-plugins-editor";
+import createSideToolbarPlugin from 'draft-js-side-toolbar-plugin';
+import BlockTypeSelect from 'draft-js-side-toolbar-plugin/lib/components/BlockTypeSelect';
+import createEmojiPlugin from 'draft-js-emoji-plugin';
+import createGiphyPlugin from '@jimmycode/draft-js-giphy-plugin';
 import 'draft-js/dist/Draft.css';
 import "./TextFieldDialog.css";
 import API from "../../utils/API"
 import { makeStyles } from "@material-ui/core/styles";
+import 'draft-js-emoji-plugin/lib/plugin.css'
+import 'draft-js-side-toolbar-plugin/lib/plugin.css';
+import '@jimmycode/draft-js-giphy-plugin/lib/plugin.css';
 
 const useStyles = makeStyles((theme) => ({
     textBox: {
@@ -32,6 +41,31 @@ const useStyles = makeStyles((theme) => ({
       },
 }));
 
+const emojiPlugin = createEmojiPlugin();
+const { EmojiSuggestions, EmojiSelect } = emojiPlugin;
+const giphyPlugin = createGiphyPlugin({
+  options: {
+    apiKey: process.env.REACT_APP_API_KEY
+  },
+});
+const { GihpyButton } = giphyPlugin;
+
+const DefaultBlockTypeSelect = ({ getEditorState, setEditorState, theme }) => (
+  <BlockTypeSelect
+    getEditorState={getEditorState}
+    setEditorState={setEditorState}
+    theme={theme}
+    structure={[ 
+      GihpyButton
+    ]}
+  />
+);
+ 
+const sideToolbarPlugin = createSideToolbarPlugin({
+  structure: [DefaultBlockTypeSelect],
+});
+const { SideToolbar } = sideToolbarPlugin;
+
 const styleMap = {
   "HIGHLIGHT": {
     backgroundColor: "yellow"
@@ -43,7 +77,7 @@ const TextFieldDialog = () => {
     const [editorState, setEditorState] = useState(() => EditorState.createEmpty())
     const [subject, setSubject] = useState();
     const classes = useStyles();
-  
+
     const handleClickOpen = () => {
       setOpen(true);
     };
@@ -95,7 +129,9 @@ const TextFieldDialog = () => {
       API.POST(data).then(x => {
         setOpen(false);
       })
-    }
+    };
+
+
   
     return (
       <div>
@@ -128,9 +164,12 @@ const TextFieldDialog = () => {
               <IconButton onClick={toggleInlineStyles} data-style="HIGHLIGHT">
                 <HighlightIcon />
               </IconButton>
+              <EmojiSelect />
+              <SideToolbar />
             </Toolbar>
             <div className="textfield">
-            <Editor editorState={editorState} onChange={handleChange} handleKeyCommand={handleKeyCommand} customStyleMap={styleMap}/>
+            <Editor editorState={editorState} onChange={handleChange} handleKeyCommand={handleKeyCommand} customStyleMap={styleMap} plugins={[emojiPlugin, giphyPlugin]}/>
+            <EmojiSuggestions />
             </div>
           </DialogContent>
           <DialogActions>

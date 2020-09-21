@@ -4,6 +4,7 @@ import {Editor, EditorState, convertFromRaw } from "draft-js"
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import API from "../../utils/API";
+import 'draft-js-emoji-plugin/lib/plugin.css'
 
 const useStyles = makeStyles({
 announcementContainer: {
