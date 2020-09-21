@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import {Editor, EditorState, convertFromRaw } from "draft-js"
+import { EditorState, convertFromRaw } from "draft-js"
+import Editor from "draft-js-plugins-editor";
+import createEmojiPlugin from 'draft-js-emoji-plugin';
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import API from "../../utils/API";
 import 'draft-js-emoji-plugin/lib/plugin.css'
+import 'draft-js/dist/Draft.css';
 
 const useStyles = makeStyles({
 announcementContainer: {
@@ -23,6 +26,8 @@ announcementContainer: {
       border: "none"
   }
 });
+
+const emojiPlugin = createEmojiPlugin();
 
 const styleMap = {
     "HIGHLIGHT": {
@@ -48,7 +53,7 @@ const AnnouncementCard = ({id ,subject, body}) => {
         </Typography>
       </Grid>
       <Grid item xs={6}>
-        <Editor editorState={editorState} customStyleMap={styleMap} readOnly/>
+        <Editor editorState={editorState} customStyleMap={styleMap} readOnly plugins={[emojiPlugin]}/>
       </Grid>
     </Grid>
     )
