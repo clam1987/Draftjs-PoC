@@ -131,7 +131,7 @@ const TextFieldDialog = () => {
       })
     };
 
-
+    const plugins = [emojiPlugin, giphyPlugin, sideToolbarPlugin];
   
     return (
       <div>
@@ -165,11 +165,11 @@ const TextFieldDialog = () => {
                 <HighlightIcon />
               </IconButton>
               <EmojiSelect />
-              <SideToolbar />
             </Toolbar>
             <div className="textfield">
-            <Editor editorState={editorState} onChange={handleChange} handleKeyCommand={handleKeyCommand} customStyleMap={styleMap} plugins={[emojiPlugin, giphyPlugin]}/>
+            <Editor editorState={editorState} onChange={handleChange} handleKeyCommand={handleKeyCommand} customStyleMap={styleMap} plugins={plugins}/>
             <EmojiSuggestions />
+              <SideToolbar />
             </div>
           </DialogContent>
           <DialogActions>

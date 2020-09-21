@@ -3,11 +3,14 @@ import { makeStyles } from "@material-ui/core/styles";
 import { EditorState, convertFromRaw } from "draft-js"
 import Editor from "draft-js-plugins-editor";
 import createEmojiPlugin from 'draft-js-emoji-plugin';
+import createGiphyPlugin from '@jimmycode/draft-js-giphy-plugin';
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import API from "../../utils/API";
 import 'draft-js-emoji-plugin/lib/plugin.css'
 import 'draft-js/dist/Draft.css';
+import 'draft-js-side-toolbar-plugin/lib/plugin.css';
+import '@jimmycode/draft-js-giphy-plugin/lib/plugin.css';
 
 const useStyles = makeStyles({
 announcementContainer: {
@@ -28,6 +31,12 @@ announcementContainer: {
 });
 
 const emojiPlugin = createEmojiPlugin();
+const giphyPlugin = createGiphyPlugin({
+  options: {
+    apiKey: process.env.REACT_APP_API_KEY
+  },
+});
+const { GihpyButton } = giphyPlugin;
 
 const styleMap = {
     "HIGHLIGHT": {
